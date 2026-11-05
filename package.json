@@ -1,0 +1,30 @@
+{
+  "name": "magpie-token-receipt",
+  "version": "0.1.0",
+  "description": "magpie page plugin: prints today's token usage as a thermal supermarket receipt, in SVG",
+  "type": "module",
+  "files": ["page/", "README.md", "LICENSE"],
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\""
+  },
+  "keywords": ["magpie", "magpie-plugin", "usage", "receipt", "token"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kilng235/magpie-token-receipt.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kilng235/magpie-token-receipt/issues"
+  },
+  "homepage": "https://github.com/kilng235/magpie-token-receipt#readme",
+  "magpie": {
+    "name": "Token 小票 · Token Receipt",
+    "icon": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23f4f2ea' stroke='%2330303a' stroke-width='1.4' d='M7 3h18v26l-3-2-3 2-3-2-3 2-3-2z'/%3E%3Cg fill='%2330303a'%3E%3Crect x='10' y='8' width='12' height='1.7'/%3E%3Crect x='10' y='12' width='9' height='1.7'/%3E%3Crect x='10' y='16' width='12' height='1.7'/%3E%3Crect x='10' y='20' width='6' height='1.7'/%3E%3C/g%3E%3C/svg%3E",
+    "page": {
+      "title": "Token Receipt",
+      "file": "page/index.html",
+      "titles": { "zh": "Token 小票", "zh-TW": "Token 收據", "ja": "トークン領収書" }
+    },
+    "permissions": ["usage:summary", "providers:list"]
+  }
+}

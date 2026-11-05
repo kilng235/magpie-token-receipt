@@ -1,0 +1,12 @@
+# 这插件没有构建步骤、没有运行时依赖；这里只挡可能出现的本地垃圾
+node_modules/
+bun.lockb
+package-lock.json
+*.tgz
+*.log
+.DS_Store
+Thumbs.db
+# 本地 magpie 沙箱（开发时才可能有）
+.sandbox/
+.live/
+.shot/

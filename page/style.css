@@ -1,0 +1,374 @@
+/* 小票页的外观：周边控件跟 magpie 主题走，纸和油墨永远是自己那一套。
+   SVG 里的类都写在这里 —— 页面不写内联样式，沙箱的 CSP 也只放行自己的文件。 */
+
+:root {
+  --mt-ink: #26262c;
+  --mt-ink-dim: #565660;
+  --mt-ink-faint: #8b8b95;
+  --mt-rule: #3a3a42;
+  --mt-stamp: #b23b32;
+  --mt-sheet: #f8f6ef;
+}
+
+html {
+  background: var(--magpie-bg);
+}
+
+body {
+  margin: 0;
+  padding: 0 0 40px;
+  color: var(--magpie-fg);
+  font-family: var(--magpie-font, system-ui, sans-serif);
+}
+
+/* ── 顶部控件条 ───────────────────────────────────────────── */
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  background: color-mix(in srgb, var(--magpie-bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--magpie-line);
+  font-size: 13px;
+}
+
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--magpie-line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.bar button,
+.bar select {
+  font: inherit;
+  color: var(--magpie-fg-2);
+  background: var(--magpie-card);
+  border: 0;
+  padding: 5px 11px;
+  cursor: pointer;
+}
+
+.seg button + button {
+  border-left: 1px solid var(--magpie-line);
+}
+
+.seg button.on {
+  background: var(--magpie-accent);
+  color: var(--magpie-accent-fg);
+}
+
+.bar button.ghost {
+  border: 1px solid var(--magpie-line);
+  border-radius: 8px;
+}
+
+.bar button.ghost:hover {
+  border-color: var(--magpie-accent);
+  color: var(--magpie-fg);
+}
+
+.bar button.ghost:active {
+  transform: translateY(1px);
+}
+
+.fields {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.fields label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--magpie-muted);
+}
+
+.status {
+  margin-left: auto;
+  color: var(--magpie-faint);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.status.bad {
+  color: var(--magpie-red);
+}
+
+/* ── 舞台：纸放在桌面上 ───────────────────────────────────── */
+.stage {
+  display: flex;
+  justify-content: center;
+  padding: 26px 14px 0;
+}
+
+.paper {
+  width: 372px;
+  max-width: 100%;
+}
+
+.paper svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* 每次重画都从纸仓里"吐"出来一次 */
+.paper.anim svg {
+  animation: mt-feed 0.62s cubic-bezier(0.22, 0.72, 0.2, 1);
+  transform-origin: top center;
+}
+
+@keyframes mt-feed {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 -2% 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paper.anim svg {
+    animation: none;
+  }
+}
+
+.receipt-text {
+  width: 372px;
+  max-width: 94%;
+  margin: 18px auto 0;
+  padding: 12px 14px;
+  overflow: auto;
+  white-space: pre;
+  background: var(--magpie-card);
+  border: 1px solid var(--magpie-line);
+  border-radius: 10px;
+  color: var(--magpie-fg-2);
+  font-family: var(--magpie-code, ui-monospace, monospace);
+  font-size: 11.5px;
+  line-height: 1.45;
+  user-select: all;
+}
+
+/* ── 纸 ───────────────────────────────────────────────────── */
+.mt-receipt {
+  overflow: visible;
+  font-family: var(--magpie-code, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.32)) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.18));
+}
+
+.mt-sheet {
+  fill: var(--mt-sheet);
+  stroke: rgba(0, 0, 0, 0.1);
+  stroke-width: 0.6;
+}
+
+.mt-kraft .mt-sheet {
+  --mt-sheet: #dcc79e;
+}
+
+.mt-aged .mt-sheet {
+  --mt-sheet: #eee4c9;
+}
+
+.mt-aged .mt-ink text {
+  opacity: 0.78;
+}
+
+.mt-crease {
+  stroke: rgba(0, 0, 0, 0.05);
+  stroke-width: 8;
+  fill: none;
+}
+
+/* ── 油墨 ─────────────────────────────────────────────────── */
+.mt-ink text {
+  fill: var(--mt-ink);
+}
+
+.mt-t {
+  font-size: 11px;
+  letter-spacing: 0.2px;
+}
+
+.mt-xs {
+  font-size: 8.4px;
+  letter-spacing: 0.3px;
+}
+
+.mt-sm {
+  font-size: 9.4px;
+}
+
+.mt-md {
+  font-size: 12.5px;
+}
+
+.mt-lg {
+  font-size: 14.5px;
+}
+
+.mt-num-sm {
+  font-size: 9.4px;
+}
+
+.mt-num {
+  font-size: 11px;
+}
+
+.mt-num-lg {
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.mt-num-xl {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.mt-item {
+  font-size: 10.8px;
+}
+
+.mt-tight {
+  font-size: 9.8px;
+}
+
+.mt-r {
+  font-variant-numeric: tabular-nums;
+}
+
+.mt-bold {
+  font-weight: 700;
+}
+
+.mt-spaced {
+  letter-spacing: 2.4px;
+}
+
+/* 商品名后的 ×次数，像收银员敲的小字 */
+.mt-xn {
+  font-size: 8.6px;
+  fill: var(--mt-ink-faint);
+}
+
+.mt-dim {
+  fill: var(--mt-ink-dim);
+}
+
+.mt-faint {
+  fill: var(--mt-ink-faint);
+}
+
+.mt-warn {
+  fill: #93332c;
+}
+
+/* ── 分隔线 ───────────────────────────────────────────────── */
+.mt-rule {
+  stroke: var(--mt-rule);
+  stroke-width: 1;
+  fill: none;
+}
+
+.mt-dash {
+  stroke-dasharray: 1.6 3;
+}
+
+.mt-thick {
+  stroke-width: 1.9;
+}
+
+.mt-hair {
+  stroke-width: 0.7;
+  opacity: 0.8;
+}
+
+.mt-bars rect {
+  fill: var(--mt-ink);
+}
+
+/* ── 红章：只许盖在空白带上，不许压字 ─────────────────────── */
+.mt-stamp {
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+}
+
+.mt-stamp-o,
+.mt-stamp-i {
+  fill: none;
+  stroke: var(--mt-stamp);
+}
+
+.mt-stamp-o {
+  stroke-width: 2.4;
+  stroke-dasharray: 4 2.6;
+}
+
+.mt-stamp-i {
+  stroke-width: 1;
+  opacity: 0.85;
+}
+
+.mt-stamp-t {
+  fill: var(--mt-stamp);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-anchor: middle;
+}
+
+.mt-stamp-s {
+  fill: var(--mt-stamp);
+  font-size: 7.6px;
+  letter-spacing: 0.4px;
+  text-anchor: middle;
+  opacity: 0.9;
+}
+
+/* 中文票面：字距松一点，全角字符不挤 */
+.mt-zh .mt-t {
+  letter-spacing: 0.4px;
+}
+
+/* 深色主题里给纸加一点环境光，别像贴纸糊在黑纸上 */
+[data-theme="dark"] .mt-receipt {
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.55)) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
+}
+
+@media (max-width: 460px) {
+  .bar {
+    padding: 10px 12px;
+  }
+  .status {
+    margin-left: 0;
+    flex-basis: 100%;
+  }
+}
+
+@media print {
+  .bar,
+  .receipt-text,
+  noscript {
+    display: none !important;
+  }
+  html,
+  body {
+    background: #fff;
+  }
+  .stage {
+    padding: 0;
+  }
+  .mt-receipt {
+    filter: none;
+  }
+}

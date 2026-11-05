@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Token Receipt</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="_magpie/bridge.js"></script>
+    <script src="receipt.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="bar" id="bar">
+      <div class="seg" id="period">
+        <button type="button" data-p="today">今日</button>
+        <button type="button" data-p="7d">7 天</button>
+        <button type="button" data-p="30d">30 天</button>
+      </div>
+      <button type="button" id="reprint" class="ghost">重打</button>
+      <div class="fields">
+        <label><input type="checkbox" id="cost" checked /><span>金额</span></label>
+        <label><span>条目</span> <select id="top">
+          <option value="6">6</option>
+          <option value="12" selected>12</option>
+          <option value="20">20</option>
+          <option value="0">全部</option>
+        </select></label>
+        <button type="button" id="paper" class="ghost">纸张</button>
+        <button type="button" id="lang" class="ghost">EN</button>
+        <button type="button" id="astext" class="ghost">文本版</button>
+      </div>
+      <span class="status" id="status">…</span>
+    </div>
+
+    <div class="stage">
+      <div class="paper" id="paper-box"></div>
+    </div>
+
+    <pre class="receipt-text" id="text-box" hidden></pre>
+    <noscript><p>magpie 的插件页面需要脚本。</p></noscript>
+  </body>
+</html>

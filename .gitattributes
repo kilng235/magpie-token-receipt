@@ -1,0 +1,4 @@
+# 保持 LF：magpie 就地加载这些文件，别按机器换行符产生无谓 diff
+* text=auto eol=lf
+*.png binary
+*.svg text eol=lf
