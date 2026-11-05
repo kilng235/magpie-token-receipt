@@ -109,7 +109,7 @@ body {
   padding: 26px 14px 0;
 }
 
-/* 机身钉在底部不动，纸往上长；rig 预留满高，免得打印时整机在页面上跳 */
+/* 机身钉在上方不动，纸从缝里出来往下伸；rig 预留满高，免得打印时整机在页面上跳 */
 .rig {
   --mt-body: 44px;
   position: relative;
@@ -123,11 +123,11 @@ body {
   position: absolute;
   left: 10px;
   right: 10px;
-  /* 底边压进缝里 7px，被机身盖住：纸像是从机器内部顶出来的 */
-  bottom: calc(var(--mt-body) - 7px);
+  /* 顶边压进缝里 7px，被机身盖住：纸像是从机器内部伸出来的 */
+  top: calc(var(--mt-body) - 7px);
   height: var(--mt-h, 420px);
   z-index: 1;
-  transform-origin: bottom center;
+  transform-origin: top center;
 }
 
 .sheet svg {
@@ -136,7 +136,7 @@ body {
   height: auto;
 }
 
-/* 顶纸：底边钉在缝口，高度按行数跳步往上涨，一步正好一行 */
+/* 出纸：顶边钉在缝口，高度按行数跳步往下长，一步正好一行 */
 .printing .paper {
   overflow: hidden;
   animation: mt-push var(--mt-dur, 1.5s) steps(var(--mt-steps, 26), end) both, mt-wobble 0.5s steps(2, end) infinite;
@@ -161,13 +161,13 @@ body {
   }
 }
 
-/* 打印头就在缝口：亮线贴在纸的底边上，纸多长它都不动 */
+/* 打印头压在出纸沿：亮线贴在纸的底边上，纸多长它跟着走 */
 .head {
   position: absolute;
   left: -3px;
   right: -3px;
-  /* 纸底边塞在机身下 7px，亮线抬回缝口才看得见 */
-  bottom: 7px;
+  /* 底边就是出纸沿，亮线贴在那里 */
+  bottom: 0;
   height: 3px;
   opacity: 0;
   pointer-events: none;
@@ -183,12 +183,12 @@ body {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0;
+  top: 0;
   height: var(--mt-body);
   z-index: 2;
   background: linear-gradient(180deg, #3a3a42, #2a2a31 55%, #232329);
   border: 1px solid rgba(0, 0, 0, 0.55);
-  border-radius: 7px 7px 14px 14px;
+  border-radius: 14px 14px 7px 7px;
   box-shadow: 0 12px 22px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
@@ -271,7 +271,7 @@ body {
   position: absolute;
   left: 12px;
   right: 12px;
-  top: 0;
+  bottom: 0;
   height: 7px;
   border-radius: 0 0 4px 4px;
   background: #0d0d11;
