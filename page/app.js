@@ -51,11 +51,11 @@
     cost: $("cost"),
     top: $("top"),
     paperBtn: $("paper"),
+    feedBtn: $("feed"),
     lang: $("lang"),
     astext: $("astext"),
     status: $("status"),
     printer: $("printer"),
-    box: $("paper-box"),
     sheet: $("sheet"),
     text: $("text-box"),
   };
@@ -116,12 +116,13 @@
     else if (summary) doneText = u().printed({ time: lastPaint, calls: num(summary.calls), tokens: num(r.stats.grandTok) });
     else doneText = "";
 
-    // 吐纸：跳步数 = 行数，一步正好一行；时长跟着行数走，长票慢一点
+    // 顶纸：跳步数 = 行数，一步正好一行；时长跟着行数走，长票慢一点
     const animate = feed && opts.animate && !noMotion() && !error;
     els.printer.classList.remove("printing");
+    // 纸高先交给机器：rig 的高度 = 纸 + 机身，机身才不会在打印时上下跳
+    els.printer.style.setProperty("--mt-h", els.sheet.offsetHeight + "px");
     if (animate) {
       const dur = Math.min(2.6, Math.max(0.85, r.stats.rows * 0.055));
-      els.printer.style.setProperty("--mt-h", els.box.offsetHeight + "px");
       els.printer.style.setProperty("--mt-dur", dur.toFixed(2) + "s");
       els.printer.style.setProperty("--mt-steps", String(Math.max(6, r.stats.rows)));
       void els.printer.offsetWidth; // 强制重排，同一张票连着重打也能重新起播
@@ -132,9 +133,8 @@
     }
     feed = true;
   }
-
   els.printer.addEventListener("animationend", (ev) => {
-    if (ev.animationName !== "mt-grow") return;
+    if (ev.animationName !== "mt-push") return;
     els.printer.classList.remove("printing");
     setStatus(doneText, false);
   });
@@ -189,6 +189,7 @@
     refresh();
   });
   els.reprint.addEventListener("click", () => refresh());
+  els.feedBtn.addEventListener("click", () => refresh());
   els.cost.addEventListener("change", () => set({ showCost: els.cost.checked }));
   els.top.addEventListener("change", () => set({ top: Number(els.top.value) }));
   els.paperBtn.addEventListener("click", () => set({ paper: { white: "kraft", kraft: "aged", aged: "white" }[opts.paper] || "white" }));
