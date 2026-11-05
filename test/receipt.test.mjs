@@ -30,18 +30,19 @@ test("条目没被截断时不虚构「其他」一行", () => {
 });
 
 test("同一模型名走多个供应商时合并成一件商品，并在名字后标 ×次数", () => {
-  // 16 条 models 里只有 8 个不同名字，这是 magpie 的真实形状
+  // 16 条 models 里只有 8 个不同名字，这是 magpie 的真实形状（fixture 里的名字与时区已通用化）
   const merged = mergeItems(fx.today.models);
   assert.equal(merged.length, 8);
-  const plus = merged.find((m) => m.name === "plus");
-  assert.equal(plus.hosts, 2);
+  const dup = merged.find((m) => m.name === "model-zeta");
+  assert.ok(dup, "fixture 里该有重名的模型");
+  assert.equal(dup.hosts, 2);
   assert.equal(
-    plus.calls,
-    fx.today.models.filter((m) => m.model === "plus").reduce((a, m) => a + m.calls, 0),
+    dup.calls,
+    fx.today.models.filter((m) => m.model === "model-zeta").reduce((a, m) => a + m.calls, 0),
   );
   const r = build(fx.today, { top: 0 });
-  assert.equal(r.svg.split(">plus<tspan").length - 1, 1, "票面上 plus 只印一次");
-  assert.ok(r.svg.includes(`×${plus.calls}`), "合并后的笔数写在名字后面");
+  assert.equal(r.svg.split(">model-zeta<tspan").length - 1, 1, "票面上同一个名字只印一次");
+  assert.ok(r.svg.includes(`×${dup.calls}`), "合并后的笔数写在名字后面");
 });
 
 test("同样的用量永远打出同一张票（票号、条码、条宽都来自 hash）", () => {
@@ -71,7 +72,7 @@ test("读取失败时画故障票，不画 NaN 也不崩", () => {
 });
 
 test("空 models 也画得出来（今天还没用过）", () => {
-  const empty = { period: "today", since: "2026-11-05T00:00:00+08:00", calls: 0, errors: 0, input: 0, output: 0, cacheRead: 0, cost: 0, models: [] };
+  const empty = { period: "today", since: "2026-11-05T00:00:00+00:00", calls: 0, errors: 0, input: 0, output: 0, cacheRead: 0, cost: 0, models: [] };
   const r = build(empty);
   assert.match(r.svg, /本时段还没有用量|no usage in this window/);
   assert.equal(r.stats.grandTok, 0);

@@ -1,7 +1,7 @@
 {
  "today": {
   "period": "today",
-  "since": "2026-11-05T00:00:00+08:00",
+  "since": "2026-11-05T00:00:00+00:00",
   "calls": 88,
   "errors": 6,
   "input": 403311,
@@ -10,112 +10,112 @@
   "cost": 0.20040419403,
   "models": [
    {
-    "model": "MiniMax-M3",
+    "model": "model-alpha",
     "calls": 10,
     "input": 54841,
     "output": 14554,
     "cost": 0.045410580000000006
    },
    {
-    "model": "glm-5.3-flash",
+    "model": "model-beta",
     "calls": 7,
     "input": 31949,
     "output": 13933,
     "cost": 0.012084699709999999
    },
    {
-    "model": "big-pickle",
+    "model": "model-gamma",
     "calls": 6,
     "input": 35551,
     "output": 10114,
     "cost": 0
    },
    {
-    "model": "quest-auto",
+    "model": "model-delta",
     "calls": 6,
     "input": 29636,
     "output": 5580,
     "cost": 0
    },
    {
-    "model": "GLM-5.3",
+    "model": "model-epsilon",
     "calls": 5,
     "input": 27490,
     "output": 5659,
     "cost": 0.06466174147999999
    },
    {
-    "model": "plus",
+    "model": "model-zeta",
     "calls": 6,
     "input": 27275,
     "output": 5451,
     "cost": 0
    },
    {
-    "model": "plus",
+    "model": "model-zeta",
     "calls": 8,
     "input": 24797,
     "output": 5846,
     "cost": 0
    },
    {
-    "model": "big-pickle",
+    "model": "model-gamma",
     "calls": 6,
     "input": 25466,
     "output": 4690,
     "cost": 0
    },
    {
-    "model": "GLM-5.3-Flash",
+    "model": "model-eta",
     "calls": 5,
     "input": 23308,
     "output": 4453,
     "cost": 0.010665870309999999
    },
    {
-    "model": "MiniMax-M3",
+    "model": "model-alpha",
     "calls": 4,
     "input": 22528,
     "output": 4273,
     "cost": 0.011885999999999999
    },
    {
-    "model": "flash",
+    "model": "model-theta",
     "calls": 5,
     "input": 20140,
     "output": 3863,
     "cost": 0
    },
    {
-    "model": "GLM-5.3",
+    "model": "model-epsilon",
     "calls": 4,
     "input": 18479,
     "output": 3972,
     "cost": 0.045008829230000005
    },
    {
-    "model": "GLM-5.3-Flash",
+    "model": "model-eta",
     "calls": 3,
     "input": 17530,
     "output": 4610,
     "cost": 0.00425171074
    },
    {
-    "model": "flash",
+    "model": "model-theta",
     "calls": 3,
     "input": 16208,
     "output": 3628,
     "cost": 0
    },
    {
-    "model": "quest-auto",
+    "model": "model-delta",
     "calls": 6,
     "input": 15799,
     "output": 2180,
     "cost": 0
    },
    {
-    "model": "glm-5.3-flash",
+    "model": "model-beta",
     "calls": 4,
     "input": 12314,
     "output": 3264,
@@ -125,7 +125,7 @@
  },
  "d7": {
   "period": "7d",
-  "since": "2026-10-30T00:00:00+08:00",
+  "since": "2026-10-30T00:00:00+00:00",
   "calls": 304,
   "errors": 17,
   "input": 1334528,
@@ -134,112 +134,112 @@
   "cost": 0.8778238610800002,
   "models": [
    {
-    "model": "quest-auto",
+    "model": "model-delta",
     "calls": 22,
     "input": 108881,
     "output": 26075,
     "cost": 0
    },
    {
-    "model": "flash",
+    "model": "model-theta",
     "calls": 21,
     "input": 100808,
     "output": 30235,
     "cost": 0
    },
    {
-    "model": "quest-auto",
+    "model": "model-delta",
     "calls": 22,
     "input": 104668,
     "output": 20178,
     "cost": 0
    },
    {
-    "model": "GLM-5.3",
+    "model": "model-epsilon",
     "calls": 18,
     "input": 101582,
     "output": 23131,
     "cost": 0.29880942135
    },
    {
-    "model": "glm-5.3-flash",
+    "model": "model-beta",
     "calls": 19,
     "input": 92034,
     "output": 27091,
     "cost": 0.029322675729999997
    },
    {
-    "model": "GLM-5.3",
+    "model": "model-epsilon",
     "calls": 22,
     "input": 88058,
     "output": 30774,
     "cost": 0.35482686934
    },
    {
-    "model": "big-pickle",
+    "model": "model-gamma",
     "calls": 20,
     "input": 86476,
     "output": 25586,
     "cost": 0
    },
    {
-    "model": "big-pickle",
+    "model": "model-gamma",
     "calls": 21,
     "input": 86599,
     "output": 22741,
     "cost": 0
    },
    {
-    "model": "plus",
+    "model": "model-zeta",
     "calls": 19,
     "input": 80202,
     "output": 23010,
     "cost": 0
    },
    {
-    "model": "flash",
+    "model": "model-theta",
     "calls": 20,
     "input": 84914,
     "output": 17073,
     "cost": 0
    },
    {
-    "model": "glm-5.3-flash",
+    "model": "model-beta",
     "calls": 20,
     "input": 76747,
     "output": 23551,
     "cost": 0.029970966489999997
    },
    {
-    "model": "MiniMax-M3",
+    "model": "model-alpha",
     "calls": 16,
     "input": 77761,
     "output": 21805,
     "cost": 0.0650922
    },
    {
-    "model": "GLM-5.3-Flash",
+    "model": "model-eta",
     "calls": 19,
     "input": 67952,
     "output": 23826,
     "cost": 0.027709180180000004
    },
    {
-    "model": "MiniMax-M3",
+    "model": "model-alpha",
     "calls": 15,
     "input": 69259,
     "output": 18693,
     "cost": 0.05270172
    },
    {
-    "model": "GLM-5.3-Flash",
+    "model": "model-eta",
     "calls": 12,
     "input": 60199,
     "output": 20341,
     "cost": 0.019390827989999998
    },
    {
-    "model": "plus",
+    "model": "model-zeta",
     "calls": 18,
     "input": 48388,
     "output": 20874,
@@ -249,7 +249,7 @@
  },
  "d30": {
   "period": "30d",
-  "since": "2026-10-07T00:00:00+08:00",
+  "since": "2026-10-07T00:00:00+00:00",
   "calls": 499,
   "errors": 29,
   "input": 2235538,
@@ -258,112 +258,112 @@
   "cost": 1.3474323062500007,
   "models": [
    {
-    "model": "glm-5.3-flash",
+    "model": "model-beta",
     "calls": 44,
     "input": 189088,
     "output": 49026,
     "cost": 0.07027683121999999
    },
    {
-    "model": "quest-auto",
+    "model": "model-delta",
     "calls": 38,
     "input": 186306,
     "output": 45411,
     "cost": 0
    },
    {
-    "model": "flash",
+    "model": "model-theta",
     "calls": 33,
     "input": 157341,
     "output": 47630,
     "cost": 0
    },
    {
-    "model": "glm-5.3-flash",
+    "model": "model-beta",
     "calls": 33,
     "input": 153304,
     "output": 47765,
     "cost": 0.056235405470000006
    },
    {
-    "model": "big-pickle",
+    "model": "model-gamma",
     "calls": 36,
     "input": 153104,
     "output": 38798,
     "cost": 0
    },
    {
-    "model": "quest-auto",
+    "model": "model-delta",
     "calls": 31,
     "input": 152329,
     "output": 33953,
     "cost": 0
    },
    {
-    "model": "GLM-5.3",
+    "model": "model-epsilon",
     "calls": 27,
     "input": 142940,
     "output": 36436,
     "cost": 0.46025014020000005
    },
    {
-    "model": "plus",
+    "model": "model-zeta",
     "calls": 32,
     "input": 138169,
     "output": 39958,
     "cost": 0
    },
    {
-    "model": "MiniMax-M3",
+    "model": "model-alpha",
     "calls": 26,
     "input": 141983,
     "output": 34505,
     "cost": 0.11176889999999999
    },
    {
-    "model": "GLM-5.3",
+    "model": "model-epsilon",
     "calls": 32,
     "input": 134147,
     "output": 42016,
     "cost": 0.48161840583999993
    },
    {
-    "model": "big-pickle",
+    "model": "model-gamma",
     "calls": 29,
     "input": 127812,
     "output": 39220,
     "cost": 0
    },
    {
-    "model": "GLM-5.3-Flash",
+    "model": "model-eta",
     "calls": 29,
     "input": 123329,
     "output": 39392,
     "cost": 0.041380388319999996
    },
    {
-    "model": "plus",
+    "model": "model-zeta",
     "calls": 33,
     "input": 118266,
     "output": 36466,
     "cost": 0
    },
    {
-    "model": "MiniMax-M3",
+    "model": "model-alpha",
     "calls": 24,
     "input": 118578,
     "output": 29900,
     "cost": 0.09298229999999999
    },
    {
-    "model": "flash",
+    "model": "model-theta",
     "calls": 30,
     "input": 114134,
     "output": 27044,
     "cost": 0
    },
    {
-    "model": "GLM-5.3-Flash",
+    "model": "model-eta",
     "calls": 22,
     "input": 84708,
     "output": 34740,
