@@ -1,5 +1,5 @@
-// app.js — 页面的胶水：读用量、接线控件、走纸动画、把选项存回 plugins.json。
-// 经典脚本 + async IIFE：magpie 的沙箱页取不到 type="module"（见 receipt.js 顶上说明）。
+// app.js — 页面的胶水：读用量、接线控件、把选项存回 plugins.json。
+// 经典脚本 + async IIFE：magpie 的沙箱页取不到 type="module"（见 receipt.js 顶上那两行）。
 (function () {
   "use strict";
 
@@ -50,13 +50,11 @@
     reprint: $("reprint"),
     cost: $("cost"),
     top: $("top"),
-    paperBtn: $("paper"),
-    feedBtn: $("feed"),
+    paper: $("paper"),
     lang: $("lang"),
     astext: $("astext"),
     status: $("status"),
-    printer: $("printer"),
-    sheet: $("sheet"),
+    stage: $("paper-box"),
     text: $("text-box"),
   };
 
@@ -66,8 +64,6 @@
   let error = "";
   let lastPaint = "";
   let busy = false;
-  let feed = true; // 这次重画要不要走纸（手动操作要，自动续打不要）
-  let doneText = "";
 
   const isZh = () => (opts.lang === "zh" ? true : opts.lang === "en" ? false : /^zh/i.test((magpie.theme && magpie.theme.lang) || ""));
   const uiLang = () => (isZh() ? "zh" : "en");
@@ -75,7 +71,6 @@
   const locale = () => (isZh() ? "zh-CN" : "en-GB");
   const clock = (d) => (d || new Date()).toLocaleTimeString(locale(), { hour12: false });
   const num = (n) => new Intl.NumberFormat(isZh() ? "zh-CN" : "en-US").format(Math.round(Number(n) || 0));
-  const noMotion = () => !!(window.matchMedia && window.matchMedia("prefers-reduced-motion: reduce").matches);
 
   function labelControls() {
     const s = u();
@@ -88,7 +83,7 @@
     els.cost.nextElementSibling.textContent = s.cost;
     els.top.previousElementSibling.textContent = s.items;
     els.top.lastElementChild.textContent = s.all;
-    els.paperBtn.textContent = s.paper + ": " + (s.papers[opts.paper] || opts.paper);
+    els.paper.textContent = s.paper + ": " + (s.papers[opts.paper] || opts.paper);
     els.lang.textContent = isZh() ? "EN" : "中文";
     els.astext.textContent = els.text.hidden ? s.astext : s.hideText;
   }
@@ -107,37 +102,14 @@
       windowLang: (magpie.theme && magpie.theme.lang) || "",
       now: new Date(),
     });
-    els.sheet.innerHTML = r.svg;
+    els.stage.innerHTML = r.svg;
+    els.stage.classList.toggle("anim", !!opts.animate);
     els.text.textContent = r.text;
     lastPaint = clock();
     labelControls();
-
-    if (error) doneText = u().failed(error.slice(0, 70));
-    else if (summary) doneText = u().printed({ time: lastPaint, calls: num(summary.calls), tokens: num(r.stats.grandTok) });
-    else doneText = "";
-
-    // 顶纸：跳步数 = 行数，一步正好一行；时长跟着行数走，长票慢一点
-    const animate = feed && opts.animate && !noMotion() && !error;
-    els.printer.classList.remove("printing");
-    // 纸高先交给机器：rig 的高度 = 纸 + 机身，机身才不会在打印时上下跳
-    els.printer.style.setProperty("--mt-h", els.sheet.offsetHeight + "px");
-    if (animate) {
-      const dur = Math.min(2.6, Math.max(0.85, r.stats.rows * 0.055));
-      els.printer.style.setProperty("--mt-dur", dur.toFixed(2) + "s");
-      els.printer.style.setProperty("--mt-steps", String(Math.max(6, r.stats.rows)));
-      void els.printer.offsetWidth; // 强制重排，同一张票连着重打也能重新起播
-      els.printer.classList.add("printing");
-      setStatus(u().printing);
-    } else {
-      setStatus(doneText, !!error);
-    }
-    feed = true;
+    if (error) setStatus(u().failed(error.slice(0, 70)), true);
+    else if (summary) setStatus(u().printed({ time: lastPaint, calls: num(summary.calls), tokens: num(r.stats.grandTok) }));
   }
-  els.printer.addEventListener("animationend", (ev) => {
-    if (ev.animationName !== "mt-push") return;
-    els.printer.classList.remove("printing");
-    setStatus(doneText, false);
-  });
 
   // 选项每秒最多写一次：控件立刻生效，稍后才落盘
   let saveTimer = 0;
@@ -147,7 +119,7 @@
       try {
         const saved = await magpie.options.set(opts);
         if (saved && typeof saved === "object") opts = Object.assign({}, defaults, saved);
-        setStatus(doneText + " · " + u().saved, false);
+        setStatus(u().printed({ time: lastPaint, calls: num(summary && summary.calls), tokens: num(summary && summary.input + summary.output + summary.cacheRead) }) + " · " + u().saved);
       } catch {
         /* 窗口不认这次写入；票面已经改了，不影响看 */
       }
@@ -160,10 +132,9 @@
     persist();
   }
 
-  async function refresh(auto) {
+  async function refresh() {
     if (busy) return;
     busy = true;
-    feed = !auto; // 自动续打只换纸，不重走一遍
     setStatus(u().printing);
     error = "";
     try {
@@ -188,11 +159,10 @@
     set({ period: b.dataset.p });
     refresh();
   });
-  els.reprint.addEventListener("click", () => refresh());
-  els.feedBtn.addEventListener("click", () => refresh());
+  els.reprint.addEventListener("click", refresh);
   els.cost.addEventListener("change", () => set({ showCost: els.cost.checked }));
   els.top.addEventListener("change", () => set({ top: Number(els.top.value) }));
-  els.paperBtn.addEventListener("click", () => set({ paper: { white: "kraft", kraft: "aged", aged: "white" }[opts.paper] || "white" }));
+  els.paper.addEventListener("click", () => set({ paper: { white: "kraft", kraft: "aged", aged: "white" }[opts.paper] || "white" }));
   els.lang.addEventListener("click", () => set({ lang: isZh() ? "en" : "zh" }));
   els.astext.addEventListener("click", () => {
     els.text.hidden = !els.text.hidden;
@@ -214,10 +184,10 @@
     let goneAt = 0;
     magpie.onVisibility((v) => {
       if (!v) goneAt = Date.now();
-      else if (opts.auto && goneAt && Date.now() - goneAt > 60000) refresh(true);
+      else if (opts.auto && goneAt && Date.now() - goneAt > 60000) refresh();
     });
     setInterval(() => {
-      if (magpie.visible && opts.auto && !busy) refresh(true);
+      if (magpie.visible && opts.auto && !busy) refresh();
     }, 120000);
   }
 

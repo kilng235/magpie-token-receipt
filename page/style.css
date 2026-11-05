@@ -102,193 +102,42 @@ body {
   color: var(--magpie-red);
 }
 
-/* ── 出纸口朝上的小票机：纸被一步步顶出来，最新一行永远在缝口生成 ── */
+/* ── 舞台：纸放在桌面上 ───────────────────────────────────── */
 .stage {
   display: flex;
   justify-content: center;
   padding: 26px 14px 0;
 }
 
-/* 机身钉在上方不动，纸从缝里出来往下伸；rig 预留满高，免得打印时整机在页面上跳 */
-.rig {
-  --mt-body: 44px;
-  position: relative;
-  width: 392px;
-  max-width: 100%;
-  height: calc(var(--mt-h, 420px) + var(--mt-body));
-}
-
 .paper {
-  box-sizing: border-box;
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  /* 顶边压进缝里 7px，被机身盖住：纸像是从机器内部伸出来的 */
-  top: calc(var(--mt-body) - 7px);
-  height: var(--mt-h, 420px);
-  z-index: 1;
-  transform-origin: top center;
+  width: 372px;
+  max-width: 100%;
 }
 
-.sheet svg {
+.paper svg {
   display: block;
   width: 100%;
   height: auto;
 }
 
-/* 出纸：顶边钉在缝口，高度按行数跳步往下长，一步正好一行 */
-.printing .paper {
-  overflow: hidden;
-  animation: mt-push var(--mt-dur, 1.5s) steps(var(--mt-steps, 26), end) both, mt-wobble 0.5s steps(2, end) infinite;
+/* 每次重画都从纸仓里"吐"出来一次 */
+.paper.anim svg {
+  animation: mt-feed 0.62s cubic-bezier(0.22, 0.72, 0.2, 1);
+  transform-origin: top center;
 }
 
-@keyframes mt-push {
+@keyframes mt-feed {
   from {
-    height: 12px;
+    clip-path: inset(0 0 100% 0);
   }
   to {
-    height: var(--mt-h, 420px);
+    clip-path: inset(0 0 -2% 0);
   }
-}
-
-/* 出纸时纸头轻微左右摆，像没夹平 */
-@keyframes mt-wobble {
-  from {
-    transform: rotate(-0.22deg);
-  }
-  to {
-    transform: rotate(0.22deg);
-  }
-}
-
-/* 打印头压在出纸沿：亮线贴在纸的底边上，纸多长它跟着走 */
-.head {
-  position: absolute;
-  left: -3px;
-  right: -3px;
-  /* 底边就是出纸沿，亮线贴在那里 */
-  bottom: 0;
-  height: 3px;
-  opacity: 0;
-  pointer-events: none;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5) 12%, rgba(255, 255, 255, 0.72) 50%, rgba(255, 255, 255, 0.5) 88%, rgba(255, 255, 255, 0));
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 5px 10px rgba(0, 0, 0, 0.22);
-}
-
-.printing .head {
-  opacity: 1;
-}
-
-.printer-body {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: var(--mt-body);
-  z-index: 2;
-  background: linear-gradient(180deg, #3a3a42, #2a2a31 55%, #232329);
-  border: 1px solid rgba(0, 0, 0, 0.55);
-  border-radius: 14px 14px 7px 7px;
-  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-/* 抖的是机身，不是纸 */
-.printing .printer-body {
-  animation: mt-jitter 0.11s steps(2, end) infinite;
-}
-
-@keyframes mt-jitter {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(0.7px);
-  }
-}
-
-.printer-lid {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 12px 0 14px;
-}
-
-.printer-model {
-  flex: 1;
-  font-family: var(--magpie-code, ui-monospace, monospace);
-  font-size: 9.5px;
-  letter-spacing: 0.16em;
-  color: #8b8b95;
-}
-
-/* 进纸键：按一下就重打，和真机那个 FEED 键一个作用 */
-.feed-btn {
-  font-family: var(--magpie-code, ui-monospace, monospace);
-  font-size: 9px;
-  line-height: 1;
-  letter-spacing: 0.14em;
-  color: #c2c2cb;
-  background: #464652;
-  border: 1px solid #0d0d11;
-  border-radius: 5px;
-  padding: 3px 8px 4px;
-  cursor: pointer;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
-}
-
-.feed-btn:hover {
-  color: #fff;
-  background: #55556a;
-}
-
-.feed-btn:active {
-  transform: translateY(1px);
-  box-shadow: none;
-}
-
-.printer-led {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #37b26b;
-  box-shadow: 0 0 7px rgba(55, 178, 107, 0.75), inset 0 0 2px rgba(0, 0, 0, 0.4);
-  transition: background 0.2s, box-shadow 0.2s;
-}
-
-.printing .printer-led {
-  background: #e6a338;
-  box-shadow: 0 0 9px rgba(230, 163, 56, 0.9), inset 0 0 2px rgba(0, 0, 0, 0.4);
-  animation: mt-blink 0.42s steps(2, end) infinite;
-}
-
-@keyframes mt-blink {
-  50% {
-    opacity: 0.35;
-  }
-}
-
-.printer-slot {
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 0;
-  height: 7px;
-  border-radius: 0 0 4px 4px;
-  background: #0d0d11;
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.95);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .printing .paper,
-  .printing .printer-body,
-  .printing .printer-led {
+  .paper.anim svg {
     animation: none;
-  }
-  .printing .paper {
-    overflow: visible;
-  }
-  .printing .head {
-    opacity: 0;
   }
 }
 
@@ -509,9 +358,6 @@ body {
 @media print {
   .bar,
   .receipt-text,
-  .printer-lid,
-  .printer-slot,
-  .head,
   noscript {
     display: none !important;
   }
@@ -521,19 +367,6 @@ body {
   }
   .stage {
     padding: 0;
-  }
-  /* 打印时只留纸，机身不外传 */
-  .printer {
-    width: auto;
-    padding: 0;
-    background: none;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-  }
-  .paper {
-    width: auto;
-    max-width: none;
   }
   .mt-receipt {
     filter: none;
