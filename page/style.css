@@ -102,42 +102,146 @@ body {
   color: var(--magpie-red);
 }
 
-/* ── 舞台：纸放在桌面上 ───────────────────────────────────── */
+/* ── 出纸口：纸从这台机器里一步步吐出来 ───────────────────── */
 .stage {
   display: flex;
   justify-content: center;
   padding: 26px 14px 0;
 }
 
-.paper {
-  width: 372px;
+/* 机身只有一截：盖子 + 出纸缝 */
+.printer {
+  width: 392px;
   max-width: 100%;
 }
 
-.paper svg {
+.printer-body {
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(180deg, #3a3a42, #2a2a31 55%, #232329);
+  border: 1px solid rgba(0, 0, 0, 0.55);
+  border-radius: 14px 14px 7px 7px;
+  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.printer-lid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 14px 7px;
+}
+
+.printer-model {
+  font-family: var(--magpie-code, ui-monospace, monospace);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  color: #8b8b95;
+}
+
+.printer-led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #37b26b;
+  box-shadow: 0 0 7px rgba(55, 178, 107, 0.75), inset 0 0 2px rgba(0, 0, 0, 0.4);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.printing .printer-led {
+  background: #e6a338;
+  box-shadow: 0 0 9px rgba(230, 163, 56, 0.9), inset 0 0 2px rgba(0, 0, 0, 0.4);
+  animation: mt-blink 0.42s steps(2, end) infinite;
+}
+
+@keyframes mt-blink {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.printer-slot {
+  height: 8px;
+  margin: 0 12px;
+  border-radius: 4px;
+  background: #0d0d11;
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.95);
+}
+
+/* 纸从盖子底下钻出来：顶边塞进机身 8px，机身压在上面 */
+.paper {
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  width: 372px;
+  max-width: calc(100% - 20px);
+  margin: -8px auto 0;
+  padding-top: 8px;
+}
+
+.sheet svg {
   display: block;
   width: 100%;
   height: auto;
 }
 
-/* 每次重画都从纸仓里"吐"出来一次 */
-.paper.anim svg {
-  animation: mt-feed 0.62s cubic-bezier(0.22, 0.72, 0.2, 1);
-  transform-origin: top center;
+/* 吐纸：整张纸按行数跳步长高，一步一行，下面的内容跟着往下移 */
+.printing .paper {
+  overflow: hidden;
+  animation: mt-grow var(--mt-dur, 1.5s) steps(var(--mt-steps, 26), end) both;
 }
 
-@keyframes mt-feed {
+@keyframes mt-grow {
   from {
-    clip-path: inset(0 0 100% 0);
+    height: 8px;
   }
   to {
-    clip-path: inset(0 0 -2% 0);
+    height: var(--mt-h, 100%);
+  }
+}
+
+/* 出纸沿那条亮线贴在纸的底边上，跟着纸一起长，不用另开一条动画 */
+.head {
+  position: absolute;
+  left: -3px;
+  right: -3px;
+  bottom: 0;
+  height: 3px;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5) 12%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.5) 88%, rgba(255, 255, 255, 0));
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 5px 10px rgba(0, 0, 0, 0.22);
+}
+
+.printing .head {
+  opacity: 1;
+}
+
+/* 抖的是机身，不是纸 */
+.printing .printer-body {
+  animation: mt-jitter 0.11s steps(2, end) infinite;
+}
+
+@keyframes mt-jitter {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(0.7px);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .paper.anim svg {
+  .printing .paper,
+  .printing .printer-body,
+  .printing .printer-led {
     animation: none;
+  }
+  .printing .paper {
+    overflow: visible;
+    height: auto;
+  }
+  .printing .head {
+    opacity: 0;
   }
 }
 
@@ -358,6 +462,9 @@ body {
 @media print {
   .bar,
   .receipt-text,
+  .printer-lid,
+  .printer-slot,
+  .head,
   noscript {
     display: none !important;
   }
@@ -367,6 +474,19 @@ body {
   }
   .stage {
     padding: 0;
+  }
+  /* 打印时只留纸，机身不外传 */
+  .printer {
+    width: auto;
+    padding: 0;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .paper {
+    width: auto;
+    max-width: none;
   }
   .mt-receipt {
     filter: none;

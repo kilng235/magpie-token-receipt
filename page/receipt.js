@@ -366,7 +366,7 @@
       text: renderText(placed),
       width: W + G * 2,
       height,
-      stats: { items: items.length, listed: listed.length, restCount, billTok, cacheTok, grandTok, listedTok, restTok, listedCost, restCost, freeItems },
+      stats: { items: items.length, listed: listed.length, restCount, billTok, cacheTok, grandTok, listedTok, restTok, listedCost, restCost, freeItems, rows: placed.length },
       stamp,
       inkY,
       ruleY,

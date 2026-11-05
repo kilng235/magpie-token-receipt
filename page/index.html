@@ -33,7 +33,20 @@
     </div>
 
     <div class="stage">
-      <div class="paper" id="paper-box"></div>
+      <!-- 出纸口：纸从这台机器的缝里被吐出来 -->
+      <div class="printer" id="printer">
+        <div class="printer-body">
+          <div class="printer-lid">
+            <span class="printer-model">MAGPIE · MP-801</span>
+            <span class="printer-led" id="led" role="img" aria-label="status"></span>
+          </div>
+          <div class="printer-slot"></div>
+        </div>
+        <div class="paper" id="paper-box">
+          <div class="sheet" id="sheet"></div>
+          <div class="head" id="head" aria-hidden="true"></div>
+        </div>
+      </div>
     </div>
 
     <pre class="receipt-text" id="text-box" hidden></pre>
